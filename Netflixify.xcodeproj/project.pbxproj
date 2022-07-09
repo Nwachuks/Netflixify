@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B038D50C28799689005072C3 /* CollectionViewTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B038D50B28799689005072C3 /* CollectionViewTVC.swift */; };
 		B056C1DD283CCD3B00E3E4C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056C1DC283CCD3B00E3E4C6 /* AppDelegate.swift */; };
 		B056C1DF283CCD3B00E3E4C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056C1DE283CCD3B00E3E4C6 /* SceneDelegate.swift */; };
 		B056C1E1283CCD3B00E3E4C6 /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056C1E0283CCD3B00E3E4C6 /* MainTabBarVC.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B038D50B28799689005072C3 /* CollectionViewTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewTVC.swift; sourceTree = "<group>"; };
 		B056C1D9283CCD3B00E3E4C6 /* Netflixify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Netflixify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B056C1DC283CCD3B00E3E4C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B056C1DE283CCD3B00E3E4C6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +84,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B038D509287992F8005072C3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B038D50A28799302005072C3 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		B056C1D0283CCD3B00E3E4C6 = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +124,8 @@
 				B09A868E283CD65E002A7B6B /* Models */,
 				B09A8690283CD66E002A7B6B /* Views */,
 				B09A8691283CD683002A7B6B /* Controllers */,
+				B038D50A28799302005072C3 /* Managers */,
+				B038D509287992F8005072C3 /* Resources */,
 				B056C1DC283CCD3B00E3E4C6 /* AppDelegate.swift */,
 				B056C1DE283CCD3B00E3E4C6 /* SceneDelegate.swift */,
 				B056C1E0283CCD3B00E3E4C6 /* MainTabBarVC.swift */,
@@ -145,6 +163,7 @@
 		B09A8690283CD66E002A7B6B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B038D50B28799689005072C3 /* CollectionViewTVC.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -296,6 +315,7 @@
 				B09A8693283CD6A2002A7B6B /* HomeVC.swift in Sources */,
 				B09A8699283CD6EC002A7B6B /* DownloadsVC.swift in Sources */,
 				B056C1DD283CCD3B00E3E4C6 /* AppDelegate.swift in Sources */,
+				B038D50C28799689005072C3 /* CollectionViewTVC.swift in Sources */,
 				B056C1DF283CCD3B00E3E4C6 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
