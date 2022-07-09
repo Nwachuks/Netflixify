@@ -19,9 +19,10 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         // Do any additional setup after loading the view.
+        view.addSubview(feedTable)
         feedTable.delegate = self
         feedTable.dataSource = self
-        view.addSubview(feedTable)
+        feedTable.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
     }
     
     override func viewDidLayoutSubviews() {
