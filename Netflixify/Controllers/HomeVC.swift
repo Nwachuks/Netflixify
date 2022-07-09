@@ -20,6 +20,7 @@ class HomeVC: UIViewController {
         view.backgroundColor = .systemBackground
         // Do any additional setup after loading the view.
         view.addSubview(feedTable)
+        configureNavBar()
         feedTable.delegate = self
         feedTable.dataSource = self
         let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
@@ -29,6 +30,16 @@ class HomeVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         feedTable.frame = view.bounds
+    }
+    
+    private func configureNavBar() {
+        let image = UIImage(named: "NetflixLogo")?.resizeTo(size: CGSize(width: 25, height: 40))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
+        ]
+        navigationController?.navigationBar.tintColor = .black
     }
 
 }
@@ -54,4 +65,22 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let defaultOffset = view.safeAreaInsets.top
+        let offset = scrollView.contentOffset.y + defaultOffset
+        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
+    }
 }
+
+extension UIImage {
+    func resizeTo(size: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { _ in
+            self.draw(in: CGRect.init(origin: CGPoint.zero, size: size))
+        }
+        
+        return image.withRenderingMode(self.renderingMode)
+    }
+}
+
