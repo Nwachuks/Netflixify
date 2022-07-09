@@ -9,6 +9,8 @@ import UIKit
 
 class HomeVC: UIViewController {
     
+    let sectionTitles = ["Popular", "Trending Movies", "Trending TV", "Top Rated", "Upcoming"]
+    
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(CollectionViewTVC.self, forCellReuseIdentifier: CollectionViewTVC.identifier)
@@ -23,6 +25,7 @@ class HomeVC: UIViewController {
         configureNavBar()
         feedTable.delegate = self
         feedTable.dataSource = self
+        feedTable.backgroundColor = .white
         let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         feedTable.tableHeaderView = headerView
     }
@@ -46,11 +49,22 @@ class HomeVC: UIViewController {
 
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        10
+        return sectionTitles.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionTitles[section]
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        header.textLabel?.textColor = .black
+        header.textLabel?.frame = CGRect(x: header.bounds.origin.x + 20, y: header.bounds.origin.y, width: 100, height: header.bounds.height)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
