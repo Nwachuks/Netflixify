@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B038D50C28799689005072C3 /* CollectionViewTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B038D50B28799689005072C3 /* CollectionViewTVC.swift */; };
+		B038D50E2879A064005072C3 /* HeroImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B038D50D2879A064005072C3 /* HeroImageView.swift */; };
 		B056C1DD283CCD3B00E3E4C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056C1DC283CCD3B00E3E4C6 /* AppDelegate.swift */; };
 		B056C1DF283CCD3B00E3E4C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056C1DE283CCD3B00E3E4C6 /* SceneDelegate.swift */; };
 		B056C1E1283CCD3B00E3E4C6 /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056C1E0283CCD3B00E3E4C6 /* MainTabBarVC.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		B038D50B28799689005072C3 /* CollectionViewTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewTVC.swift; sourceTree = "<group>"; };
+		B038D50D2879A064005072C3 /* HeroImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroImageView.swift; sourceTree = "<group>"; };
 		B056C1D9283CCD3B00E3E4C6 /* Netflixify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Netflixify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B056C1DC283CCD3B00E3E4C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B056C1DE283CCD3B00E3E4C6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				B038D50B28799689005072C3 /* CollectionViewTVC.swift */,
+				B038D50D2879A064005072C3 /* HeroImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				B056C1DD283CCD3B00E3E4C6 /* AppDelegate.swift in Sources */,
 				B038D50C28799689005072C3 /* CollectionViewTVC.swift in Sources */,
 				B056C1DF283CCD3B00E3E4C6 /* SceneDelegate.swift in Sources */,
+				B038D50E2879A064005072C3 /* HeroImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

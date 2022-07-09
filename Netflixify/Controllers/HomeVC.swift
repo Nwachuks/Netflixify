@@ -22,7 +22,8 @@ class HomeVC: UIViewController {
         view.addSubview(feedTable)
         feedTable.delegate = self
         feedTable.dataSource = self
-        feedTable.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        feedTable.tableHeaderView = headerView
     }
     
     override func viewDidLayoutSubviews() {
