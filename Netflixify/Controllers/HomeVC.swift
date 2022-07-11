@@ -7,9 +7,17 @@
 
 import UIKit
 
+enum Sections: Int {
+    case Popular = 0
+    case TrendingMovies = 1
+    case TrendingTVShows = 2
+    case Upcoming = 3
+    case TopRated = 4
+}
+
 class HomeVC: UIViewController {
     
-    let sectionTitles = ["Popular", "Trending Movies", "Trending TV", "Top Rated", "Upcoming"]
+    let sectionTitles = ["Popular", "Trending Movies", "Trending TV Shows", "Upcoming", "Top Rated"]
     
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -28,8 +36,6 @@ class HomeVC: UIViewController {
         feedTable.backgroundColor = .white
         let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         feedTable.tableHeaderView = headerView
-        
-        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -46,27 +52,11 @@ class HomeVC: UIViewController {
         ]
         navigationController?.navigationBar.tintColor = .black
     }
-    
-    private func fetchData() {
-        NetworkManager.instance.getTrendingMovies { results in
-            switch results {
-            case .success(let movies):
-                print(movies)
-                break
-            case .failure(let error):
-                print(error)
-                break
-            }
-        }
-        
-        NetworkManager.instance.getTrendingTVShows { _ in
-            //
-        }
-    }
 
 }
 
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sectionTitles.count
     }
@@ -92,6 +82,61 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTVC.identifier, for: indexPath) as? CollectionViewTVC  else { return UITableViewCell() }
+        
+        switch indexPath.section {
+        case Sections.Popular.rawValue:
+            NetworkManager.instance.getPopularMovies { results in
+                switch results {
+                case .success(let shows):
+                    cell.configure(using: shows)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            break
+        case Sections.TrendingMovies.rawValue:
+            NetworkManager.instance.getTrendingMovies { results in
+                switch results {
+                case .success(let shows):
+                    cell.configure(using: shows)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            break
+        case Sections.TrendingTVShows.rawValue:
+            NetworkManager.instance.getTrendingTVShows { results in
+                switch results {
+                case .success(let shows):
+                    cell.configure(using: shows)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            break
+        case Sections.Upcoming.rawValue:
+            NetworkManager.instance.getUpcomingMovies { results in
+                switch results {
+                case .success(let shows):
+                    cell.configure(using: shows)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            break
+        case Sections.TopRated.rawValue:
+            NetworkManager.instance.getTopRatedMovies { results in
+                switch results {
+                case .success(let shows):
+                    cell.configure(using: shows)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            break
+        default:
+            break
+        }
         return cell
     }
     
@@ -104,4 +149,5 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         let offset = scrollView.contentOffset.y + defaultOffset
         navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
     }
+    
 }

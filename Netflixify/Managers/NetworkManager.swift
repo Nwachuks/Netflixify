@@ -10,6 +10,7 @@ import Foundation
 struct Constants {
     static let API_KEY = "3c8f4ab5cc70f5ea365fde08e9972a69"
     static let BASE_URL = "https://api.themoviedb.org/3"
+    static let IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 }
 
 enum APIError: Error {
@@ -64,8 +65,8 @@ class NetworkManager {
         task.resume()
     }
     
-    func getTopRatedMovies(completion: @escaping (Result<[Show], Error>) -> Void) {
-        guard let url = URL(string: "\(Constants.BASE_URL)/movie/top_rated?api_key=\(Constants.API_KEY)&language=en-US&page=1") else { return }
+    func getUpcomingMovies(completion: @escaping (Result<[Show], Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.BASE_URL)/movie/upcoming?api_key=\(Constants.API_KEY)&language=en-US&page=1") else { return }
         
         let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
             guard let data = data, error == nil else { return }
@@ -79,8 +80,8 @@ class NetworkManager {
         task.resume()
     }
     
-    func getUpcomingMovies(completion: @escaping (Result<[Show], Error>) -> Void) {
-        guard let url = URL(string: "\(Constants.BASE_URL)/movie/upcoming?api_key=\(Constants.API_KEY)&language=en-US&page=1") else { return }
+    func getTopRatedMovies(completion: @escaping (Result<[Show], Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.BASE_URL)/movie/top_rated?api_key=\(Constants.API_KEY)&language=en-US&page=1") else { return }
         
         let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
             guard let data = data, error == nil else { return }

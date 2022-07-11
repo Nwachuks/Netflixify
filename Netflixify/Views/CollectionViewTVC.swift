@@ -11,11 +11,14 @@ class CollectionViewTVC: UITableViewCell {
 
     static let identifier = String(describing: CollectionViewTVC.self)
     
+    private var shows = [Show]()
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 140, height: 200)
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.showsHorizontalScrollIndicator = false
         collection.register(ShowCVC.self, forCellWithReuseIdentifier: ShowCVC.identifier)
         return collection
     }()
@@ -38,16 +41,25 @@ class CollectionViewTVC: UITableViewCell {
         collectionView.frame = contentView.bounds
     }
     
+    public func configure(using shows: [Show]) {
+        self.shows = shows
+        DispatchQueue.main.async { [ weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+    
 }
 
 extension CollectionViewTVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return shows.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowCVC.identifier, for: indexPath) as? ShowCVC else { return UICollectionViewCell() }
-        cell.backgroundColor = .green
+        guard let urlString = shows[indexPath.row].posterPath else { return UICollectionViewCell() }
+        cell.configure(with: urlString)
         return cell
     }
     

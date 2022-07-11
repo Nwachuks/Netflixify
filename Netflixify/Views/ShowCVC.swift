@@ -33,8 +33,8 @@ class ShowCVC: UICollectionViewCell {
         posterImage.frame = contentView.bounds
     }
     
-    public func configure(with model: String) {
-        let imageUrl = URL(string: model)
+    public func configure(with urlString: String) {
+        let imageUrl = URL(string: "\(Constants.IMAGE_BASE_URL)\(urlString)")
         posterImage.sd_setImage(with: imageUrl)
     }
 }
