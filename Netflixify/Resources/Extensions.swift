@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+enum Sections: Int {
+    case Popular = 0
+    case TrendingMovies = 1
+    case TrendingTVShows = 2
+    case Upcoming = 3
+    case TopRated = 4
+}
+
 extension String {
     func capitalizeFirstLetter() -> String {
         return self.prefix(1).uppercased() + self.dropFirst().lowercased()
