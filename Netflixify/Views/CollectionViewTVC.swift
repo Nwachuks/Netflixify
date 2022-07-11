@@ -16,7 +16,7 @@ class CollectionViewTVC: UITableViewCell {
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 140, height: 200)
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collection.register(ShowCVC.self, forCellWithReuseIdentifier: ShowCVC.identifier)
         return collection
     }()
     
@@ -46,7 +46,7 @@ extension CollectionViewTVC: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowCVC.identifier, for: indexPath) as? ShowCVC else { return UICollectionViewCell() }
         cell.backgroundColor = .green
         return cell
     }
