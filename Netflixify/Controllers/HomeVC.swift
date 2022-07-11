@@ -28,6 +28,8 @@ class HomeVC: UIViewController {
         feedTable.backgroundColor = .white
         let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         feedTable.tableHeaderView = headerView
+        
+        getTrendingMovies()
     }
     
     override func viewDidLayoutSubviews() {
@@ -43,6 +45,19 @@ class HomeVC: UIViewController {
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
         ]
         navigationController?.navigationBar.tintColor = .black
+    }
+    
+    private func getTrendingMovies() {
+        NetworkManager.instance.getTrendingMovies { results in
+            switch results {
+            case .success(let movies):
+                print(movies)
+                break
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
     }
 
 }
