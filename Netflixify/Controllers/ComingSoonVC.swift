@@ -13,7 +13,8 @@ class ComingSoonVC: UIViewController {
     
     private let upcomingTable: UITableView = {
         let table = UITableView()
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.separatorStyle = .none
+        table.register(ShowTVC.self, forCellReuseIdentifier: ShowTVC.identifier)
         return table
     }()
 
@@ -58,9 +59,13 @@ extension ComingSoonVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = shows[indexPath.row].originalTitle ?? shows[indexPath.row].originalName ?? "Unknown"
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShowTVC.identifier, for: indexPath) as? ShowTVC else { return UITableViewCell() }
+        cell.configure(using: shows[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
     }
     
 }
