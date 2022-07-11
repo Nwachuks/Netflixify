@@ -1,5 +1,5 @@
 //
-//  Movie.swift
+//  Show.swift
 //  Netflixify
 //
 //  Created by Nwachukwu Ejiofor on 11/07/2022.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct TrendingMovies: Codable {
-    let results: [Movie]
+struct ShowCategory: Codable {
+    let results: [Show]
 }
 
-struct Movie: Codable {
+struct Show: Codable {
     let id: Int
     let mediaType: String?
     let originalName: String?

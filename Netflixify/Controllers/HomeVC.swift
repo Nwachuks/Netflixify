@@ -29,7 +29,7 @@ class HomeVC: UIViewController {
         let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         feedTable.tableHeaderView = headerView
         
-        getTrendingMovies()
+        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,7 +47,7 @@ class HomeVC: UIViewController {
         navigationController?.navigationBar.tintColor = .black
     }
     
-    private func getTrendingMovies() {
+    private func fetchData() {
         NetworkManager.instance.getTrendingMovies { results in
             switch results {
             case .success(let movies):
@@ -57,6 +57,10 @@ class HomeVC: UIViewController {
                 print(error)
                 break
             }
+        }
+        
+        NetworkManager.instance.getTrendingTVShows { _ in
+            //
         }
     }
 
@@ -101,15 +105,3 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
     }
 }
-
-extension UIImage {
-    func resizeTo(size: CGSize) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { _ in
-            self.draw(in: CGRect.init(origin: CGPoint.zero, size: size))
-        }
-        
-        return image.withRenderingMode(self.renderingMode)
-    }
-}
-
