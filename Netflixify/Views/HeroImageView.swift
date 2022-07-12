@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class HeroImageView: UIView {
     
@@ -13,7 +14,6 @@ class HeroImageView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "HeroImage")
         return imageView
     }()
     
@@ -90,5 +90,10 @@ class HeroImageView: UIView {
         ]
         gradientLayer.frame = self.bounds
         layer.addSublayer(gradientLayer)
+    }
+    
+    public func configureHeroImage(using show: Show?) {
+        guard let show = show, let poster = show.posterPath, let url = URL(string: "\(Constants.IMAGE_BASE_URL)\(poster)") else { return }
+        heroImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "HeroImage"))
     }
 }

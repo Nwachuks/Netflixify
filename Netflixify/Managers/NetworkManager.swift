@@ -13,6 +13,7 @@ struct Constants {
     static let IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
     static let YOUTUBE_API_KEY = "AIzaSyBQgbMvoYGSgtCBDqwxOy_Sp_DfHHN9CKI"
     static let YOUTUBE_SEARCH_BASE_URL = "https://youtube.googleapis.com/youtube/v3/search"
+    static let YOUTUBE_PREVIEW_BASE_URL = "https://www.youtube.com/embed/"
 }
 
 enum APIError: Error {

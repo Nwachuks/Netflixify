@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol CollectionViewTVCDelegate: AnyObject {
+    func collectionViewTVCTapped(_ cell: CollectionViewTVC, _ show: Show, _ previewUrl: String)
+}
+
 class CollectionViewTVC: UITableViewCell {
 
     static let identifier = String(describing: CollectionViewTVC.self)
+    
+    weak var collectionViewTVCDelegate: CollectionViewTVCDelegate!
     
     private var shows = [Show]()
     
@@ -68,10 +74,10 @@ extension CollectionViewTVC: UICollectionViewDelegate, UICollectionViewDataSourc
         let show = shows[indexPath.row]
         guard let showName = show.originalName ?? show.originalTitle else { return }
         
-        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { result in
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { [weak self] result in
             switch result {
             case .success(let video):
-                print(video.id)
+                self?.collectionViewTVCDelegate.collectionViewTVCTapped(self!, show, video.id.videoId)
             case .failure(let error):
                 print(error.localizedDescription)
             }

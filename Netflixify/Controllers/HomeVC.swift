@@ -11,6 +11,9 @@ class HomeVC: UIViewController {
     
     let sectionTitles = ["Popular", "Trending Movies", "Trending TV Shows", "Upcoming", "Top Rated"]
     
+    private var heroShow: Show?
+    private var headerView: HeroImageView?
+    
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(CollectionViewTVC.self, forCellReuseIdentifier: CollectionViewTVC.identifier)
@@ -26,12 +29,10 @@ class HomeVC: UIViewController {
         feedTable.delegate = self
         feedTable.dataSource = self
         feedTable.backgroundColor = .white
-        let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
-        feedTable.tableHeaderView = headerView
         
-        NetworkManager.instance.getMovieFromYoubtube(using: "Harry Potter") { result in
-            //
-        }
+        headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        feedTable.tableHeaderView = headerView
+        configureHeroShow()
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,6 +48,19 @@ class HomeVC: UIViewController {
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
         ]
         navigationController?.navigationBar.tintColor = .black
+    }
+    
+    private func configureHeroShow() {
+        NetworkManager.instance.getTrendingMovies { [weak self] results in
+            switch results {
+            case .success(let shows):
+                let selectedShow = shows.randomElement()
+                self?.heroShow = selectedShow
+                self?.headerView?.configureHeroImage(using: selectedShow)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 
 }
@@ -78,6 +92,7 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTVC.identifier, for: indexPath) as? CollectionViewTVC  else { return UITableViewCell() }
+        cell.collectionViewTVCDelegate = self
         
         switch indexPath.section {
         case Sections.Popular.rawValue:
@@ -145,5 +160,14 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         let offset = scrollView.contentOffset.y + defaultOffset
         navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
     }
-    
+}
+
+extension HomeVC: CollectionViewTVCDelegate {
+    func collectionViewTVCTapped(_ cell: CollectionViewTVC, _ show: Show, _ previewUrl: String) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = ShowPreviewVC()
+            vc.configure(using: show, previewUrl: previewUrl)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
