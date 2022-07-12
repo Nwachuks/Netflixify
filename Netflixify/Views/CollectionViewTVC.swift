@@ -55,7 +55,15 @@ class CollectionViewTVC: UITableViewCell {
     }
     
     private func downloadShow(at indexPath: IndexPath) {
-        print("Downloading \(shows[indexPath.row].originalTitle ?? shows[indexPath.row].originalTitle ?? "")")
+        let show = shows[indexPath.row]
+        DataPersistenceManager.instance.downloadShow(using: show) { result in
+            switch result {
+            case .success(let show):
+                print("Downloaded to Database")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
 }
