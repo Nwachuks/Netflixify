@@ -28,6 +28,10 @@ class HomeVC: UIViewController {
         feedTable.backgroundColor = .white
         let headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         feedTable.tableHeaderView = headerView
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "Harry Potter") { result in
+            //
+        }
     }
     
     override func viewDidLayoutSubviews() {

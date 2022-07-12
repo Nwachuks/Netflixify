@@ -58,9 +58,23 @@ extension CollectionViewTVC: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowCVC.identifier, for: indexPath) as? ShowCVC else { return UICollectionViewCell() }
-        guard let urlString = shows[indexPath.row].posterPath else { return UICollectionViewCell() }
+        guard let urlString = shows[indexPath.row].posterPath else { return cell }
         cell.configure(with: urlString)
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let show = shows[indexPath.row]
+        guard let showName = show.originalName ?? show.originalTitle else { return }
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { result in
+            switch result {
+            case .success(let video):
+                print(video.id)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }

@@ -16,6 +16,12 @@ enum Sections: Int {
     case TopRated = 4
 }
 
+extension Collection {
+    var isNotEmpty: Bool {
+        isEmpty == false
+    }
+}
+
 extension String {
     func capitalizeFirstLetter() -> String {
         return self.prefix(1).uppercased() + self.dropFirst().lowercased()
