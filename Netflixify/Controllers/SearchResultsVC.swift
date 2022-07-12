@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol SearchResultsDelegate: AnyObject {
+    func searchResultsDelegateTapped(_ show: Show, _ previewUrl: String)
+}
+
 class SearchResultsVC: UIViewController {
     
     public var shows = [Show]()
+    
+    public weak var searchResultsDelegate: SearchResultsDelegate!
     
     public let searchResultsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -46,6 +52,21 @@ extension SearchResultsVC: UICollectionViewDelegate, UICollectionViewDataSource 
         guard let urlString = shows[indexPath.row].posterPath else { return cell }
         cell.configure(with: urlString)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let show = shows[indexPath.row]
+        guard let showName = show.originalName ?? show.originalTitle else { return }
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { [weak self] result in
+            switch result {
+            case .success(let video):
+                self?.searchResultsDelegate.searchResultsDelegateTapped(show, video.id.videoId)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
 }

@@ -15,7 +15,7 @@ class CollectionViewTVC: UITableViewCell {
 
     static let identifier = String(describing: CollectionViewTVC.self)
     
-    weak var collectionViewTVCDelegate: CollectionViewTVCDelegate!
+    public weak var collectionViewTVCDelegate: CollectionViewTVCDelegate!
     
     private var shows = [Show]()
     
@@ -54,6 +54,10 @@ class CollectionViewTVC: UITableViewCell {
         }
     }
     
+    private func downloadShow(at indexPath: IndexPath) {
+        print("Downloading \(shows[indexPath.row].originalTitle ?? shows[indexPath.row].originalTitle ?? "")")
+    }
+    
 }
 
 extension CollectionViewTVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -83,4 +87,17 @@ extension CollectionViewTVC: UICollectionViewDelegate, UICollectionViewDataSourc
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let config = UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil) { [weak self] _ in
+                let downloadAction = UIAction(title: "Download", subtitle: nil, image: nil, identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
+                    self?.downloadShow(at: indexPath)
+                }
+                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction])
+            }
+        return config
+    }
+    
 }

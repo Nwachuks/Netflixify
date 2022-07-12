@@ -24,6 +24,7 @@ class ComingSoonVC: UIViewController {
         title = "Upcoming"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.tintColor = .black
         // Do any additional setup after loading the view.
         upcomingTable.delegate = self
         upcomingTable.dataSource = self
@@ -66,6 +67,25 @@ extension ComingSoonVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let show = shows[indexPath.row]
+        guard let showName = show.originalName ?? show.originalTitle else { return }
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { [weak self] result in
+            switch result {
+            case .success(let video):
+                DispatchQueue.main.async {
+                    let vc = ShowPreviewVC()
+                    vc.configure(using: show, previewUrl: video.id.videoId)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
 }

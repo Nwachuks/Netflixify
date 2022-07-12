@@ -79,6 +79,25 @@ extension TopSearchesVC: UITableViewDelegate, UITableViewDataSource {
         return 120
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let show = shows[indexPath.row]
+        guard let showName = show.originalName ?? show.originalTitle else { return }
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { [weak self] result in
+            switch result {
+            case .success(let video):
+                DispatchQueue.main.async {
+                    let vc = ShowPreviewVC()
+                    vc.configure(using: show, previewUrl: video.id.videoId)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }
 
 extension TopSearchesVC: UISearchResultsUpdating {
@@ -86,6 +105,7 @@ extension TopSearchesVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let query = searchBar.text, query.trimmingCharacters(in: .whitespaces).isNotEmpty, query.trimmingCharacters(in: .whitespaces).count >= 3, let resultsController = searchController.searchResultsController as? SearchResultsVC else { return }
+        resultsController.searchResultsDelegate = self
         
         NetworkManager.instance.getSearchMovies(with: query.trimmingCharacters(in: .whitespaces)) { results in
             DispatchQueue.main.async {
@@ -97,6 +117,18 @@ extension TopSearchesVC: UISearchResultsUpdating {
                     print(error.localizedDescription)
                 }
             }
+        }
+    }
+    
+}
+
+extension TopSearchesVC: SearchResultsDelegate {
+    
+    func searchResultsDelegateTapped(_ show: Show, _ previewUrl: String) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = ShowPreviewVC()
+            vc.configure(using: show, previewUrl: previewUrl)
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
     

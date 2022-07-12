@@ -23,6 +23,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = .black
         // Do any additional setup after loading the view.
         view.addSubview(feedTable)
         configureNavBar()
