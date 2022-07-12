@@ -19,12 +19,6 @@ class MainTabBarVC: UITabBarController {
         let topSearchesNav = UINavigationController(rootViewController: TopSearchesVC())
         let downloadsNav = UINavigationController(rootViewController: DownloadsVC())
         
-        // Set tint color to contrast light/dark mode
-//        homeNav.navigationBar.tintColor = .label
-//        comingSoonNav.navigationBar.tintColor = .label
-//        topSearchesNav.navigationBar.tintColor = .label
-//        downloadsNav.navigationBar.tintColor = .label
-        
         tabBar.tintColor = .label
         
         homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 1)

@@ -31,6 +31,9 @@ class DownloadsVC: UIViewController {
         view.addSubview(downloadsTable)
         
         fetchLocalDownloads()
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("download"), object: nil, queue: nil) { _ in
+            self.fetchLocalDownloads()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -72,6 +75,26 @@ extension DownloadsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let showItem = showItems[indexPath.row]
+        let show = convertShowItemToShow(using: showItem)
+        guard let showName = show.originalName ?? show.originalTitle else { return }
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { [weak self] result in
+            switch result {
+            case .success(let video):
+                DispatchQueue.main.async {
+                    let vc = ShowPreviewVC()
+                    vc.configure(using: show, previewUrl: video.id.videoId)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

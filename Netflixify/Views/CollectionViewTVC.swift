@@ -58,8 +58,8 @@ class CollectionViewTVC: UITableViewCell {
         let show = shows[indexPath.row]
         DataPersistenceManager.instance.downloadShow(using: show) { result in
             switch result {
-            case .success(let show):
-                print("Downloaded to Database")
+            case .success():
+                NotificationCenter.default.post(name: NSNotification.Name("download"), object: nil)
             case .failure(let error):
                 print(error.localizedDescription)
             }

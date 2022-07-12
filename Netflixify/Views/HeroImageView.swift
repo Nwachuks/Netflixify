@@ -8,7 +8,15 @@
 import UIKit
 import SDWebImage
 
+protocol HeroShowDelegate: AnyObject {
+    func showPreview(using show: Show, and previewUrl: String)
+}
+
 class HeroImageView: UIView {
+    
+    private var selectedHeroShow: Show?
+    
+    weak var heroShowDelegate: HeroShowDelegate!
     
     private let heroImageView: UIImageView = {
         let imageView = UIImageView()
@@ -30,6 +38,7 @@ class HeroImageView: UIView {
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 5
+//        button.addTarget(HeroImageView.self, action: #selector(playShow), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -41,6 +50,7 @@ class HeroImageView: UIView {
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 5
+//        button.addTarget(HeroImageView.self, action: #selector(downloadShow), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -94,6 +104,33 @@ class HeroImageView: UIView {
     
     public func configureHeroImage(using show: Show?) {
         guard let show = show, let poster = show.posterPath, let url = URL(string: "\(Constants.IMAGE_BASE_URL)\(poster)") else { return }
+        selectedHeroShow = show
         heroImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "HeroImage"))
+    }
+    
+    @objc func downloadShow() {
+        guard let show = selectedHeroShow else { return }
+        DataPersistenceManager.instance.downloadShow(using: show) { result in
+            switch result {
+            case .success():
+                NotificationCenter.default.post(name: NSNotification.Name("download"), object: nil)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    @objc func playShow() {
+        guard let show = selectedHeroShow else { return }
+        guard let showName = show.originalName ?? show.originalTitle else { return }
+        
+        NetworkManager.instance.getMovieFromYoubtube(using: "\(showName) trailer") { [weak self] result in
+            switch result {
+            case .success(let video):
+                self?.heroShowDelegate.showPreview(using: show, and: video.id.videoId)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }

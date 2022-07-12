@@ -32,6 +32,7 @@ class HomeVC: UIViewController {
         feedTable.backgroundColor = .white
         
         headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+//        headerView?.heroShowDelegate = self
         feedTable.tableHeaderView = headerView
         configureHeroShow()
     }
@@ -165,6 +166,16 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
 
 extension HomeVC: CollectionViewTVCDelegate {
     func collectionViewTVCTapped(_ cell: CollectionViewTVC, _ show: Show, _ previewUrl: String) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = ShowPreviewVC()
+            vc.configure(using: show, previewUrl: previewUrl)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+}
+
+extension HomeVC: HeroShowDelegate {
+    func showPreview(using show: Show, and previewUrl: String) {
         DispatchQueue.main.async { [weak self] in
             let vc = ShowPreviewVC()
             vc.configure(using: show, previewUrl: previewUrl)
