@@ -14,6 +14,12 @@ class HomeVC: UIViewController {
     private var heroShow: Show?
     private var headerView: HeroImageView?
     
+    private var popularShows = [Show]()
+    private var trendingMovies = [Show]()
+    private var trendingTV = [Show]()
+    private var upcomingShows = [Show]()
+    private var topRatedShows = [Show]()
+    
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(CollectionViewTVC.self, forCellReuseIdentifier: CollectionViewTVC.identifier)
@@ -32,9 +38,10 @@ class HomeVC: UIViewController {
         feedTable.backgroundColor = .white
         
         headerView = HeroImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
-//        headerView?.heroShowDelegate = self
+        headerView?.heroShowDelegate = self
         feedTable.tableHeaderView = headerView
         configureHeroShow()
+        getShowsForCategories()
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,6 +66,68 @@ class HomeVC: UIViewController {
                 let selectedShow = shows.randomElement()
                 self?.heroShow = selectedShow
                 self?.headerView?.configureHeroImage(using: selectedShow)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func getShowsForCategories() {
+        NetworkManager.instance.getPopularMovies { [weak self] results in
+            switch results {
+            case .success(let shows):
+                self?.popularShows = shows.shuffled()
+                DispatchQueue.main.async {
+                    self?.feedTable.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        NetworkManager.instance.getTrendingMovies { [weak self] results in
+            switch results {
+            case .success(let shows):
+                self?.trendingMovies = shows.shuffled()
+                DispatchQueue.main.async {
+                    self?.feedTable.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        NetworkManager.instance.getTrendingTVShows { [weak self] results in
+            switch results {
+            case .success(let shows):
+                self?.trendingTV = shows.shuffled()
+                DispatchQueue.main.async {
+                    self?.feedTable.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        NetworkManager.instance.getUpcomingMovies { [weak self] results in
+            switch results {
+            case .success(let shows):
+                self?.upcomingShows = shows.shuffled()
+                DispatchQueue.main.async {
+                    self?.feedTable.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        NetworkManager.instance.getTopRatedMovies { [weak self] results in
+            switch results {
+            case .success(let shows):
+                self?.topRatedShows = shows.shuffled()
+                DispatchQueue.main.async {
+                    self?.feedTable.reloadData()
+                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -98,54 +167,19 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.section {
         case Sections.Popular.rawValue:
-            NetworkManager.instance.getPopularMovies { results in
-                switch results {
-                case .success(let shows):
-                    cell.configure(using: shows)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            cell.configure(using: popularShows)
             break
         case Sections.TrendingMovies.rawValue:
-            NetworkManager.instance.getTrendingMovies { results in
-                switch results {
-                case .success(let shows):
-                    cell.configure(using: shows)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            cell.configure(using: trendingMovies)
             break
         case Sections.TrendingTVShows.rawValue:
-            NetworkManager.instance.getTrendingTVShows { results in
-                switch results {
-                case .success(let shows):
-                    cell.configure(using: shows)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            cell.configure(using: trendingTV)
             break
         case Sections.Upcoming.rawValue:
-            NetworkManager.instance.getUpcomingMovies { results in
-                switch results {
-                case .success(let shows):
-                    cell.configure(using: shows)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            cell.configure(using: upcomingShows)
             break
         case Sections.TopRated.rawValue:
-            NetworkManager.instance.getTopRatedMovies { results in
-                switch results {
-                case .success(let shows):
-                    cell.configure(using: shows)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            cell.configure(using: topRatedShows)
             break
         default:
             break

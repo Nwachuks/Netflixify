@@ -38,7 +38,6 @@ class HeroImageView: UIView {
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 5
-//        button.addTarget(HeroImageView.self, action: #selector(playShow), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -50,7 +49,6 @@ class HeroImageView: UIView {
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 5
-//        button.addTarget(HeroImageView.self, action: #selector(downloadShow), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -62,6 +60,8 @@ class HeroImageView: UIView {
         addSubview(centerView)
         addSubview(playButton)
         addSubview(downloadButton)
+        downloadButton.addTarget(self, action: #selector(downloadShow), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(playShow), for: .touchUpInside)
         applyConstraints()
     }
     

@@ -64,7 +64,6 @@ class ShowPreviewVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.tintColor = .black
         // Do any additional setup after loading the view.
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
@@ -80,6 +79,11 @@ class ShowPreviewVC: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         scrollView.frame = view.bounds
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .black
     }
     
     private func applyConstraints() {
